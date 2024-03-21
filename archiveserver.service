@@ -1,0 +1,12 @@
+[Unit]
+Description=OpenSteam package archive server
+After=network.target
+
+[Service]
+Type=exec
+WorkingDirectory=PATH_TO_DIR/archived_packages/
+ExecStart=/usr/bin/node index.js
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
