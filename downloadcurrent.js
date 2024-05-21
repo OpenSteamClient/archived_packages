@@ -3,7 +3,7 @@ const vdf_parser = require('vdf-parser');
 const fs = require("fs");
 const { createHash } = require('crypto');
 const manifestsToDownload = [{
-  name: "steam_client_publicbeta_ubuntu12", savename: "steam_client_ubuntu12", rootkey: "ubuntu12"}, { name: "steam_client_publicbeta_win32", savename: "steam_client_win32", rootkey: "win32" }];
+  name: "steam_client_publicbeta_ubuntu12", savenames: ["steam_client_ubuntu12", "steam_client_publicbeta_ubuntu12", "steam_client_publicbeta_families_ubuntu12"], rootkey: "ubuntu12"}, { name: "steam_client_publicbeta_win32", savenames: ["steam_client_win32"], rootkey: "win32" }];
 
 function wait(ms) {
   var start = Date.now(),
@@ -51,7 +51,10 @@ manifestsToDownload.forEach(mfdata => {
   console.log("Manifest url at: " + baseurl + mfdata.name);
   var manifest = downloadFileSync(baseurl + mfdata.name, {encoding: 'utf8'});
   console.log(manifest);
-  fs.writeFileSync("./data/client/"+mfdata.savename, manifest);
+  mfdata.savenames.forEach((str) => {
+    fs.writeFileSync("./data/client/"+str, manifest);
+  });
+
   var parsedmanifest = vdf_parser.parse(manifest)[mfdata.rootkey];
   console.log(parsedmanifest);
 
